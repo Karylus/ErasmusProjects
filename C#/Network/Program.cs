@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Xml.Linq;
 
 class Computer
 {
@@ -19,6 +20,16 @@ class Computer
     {
         this.name = n;
         this.os = os;
+
+        counter++;
+    }
+
+    public Computer(string n, string ip, string os, bool on=false)
+    {
+        this.name = n;
+        this.ipAdress = ip;
+        this.os = os;
+        this.isOn = on;
 
         counter++;
     }
@@ -80,6 +91,22 @@ class Computer
     }
 }
 
+class Server : Computer
+{
+    private string destination;
+
+    public Server (string name, string ipAdress, string os, bool isOn, string dest) : base(name, ipAdress, os, isOn)
+    {
+        this.destination = dest;
+    }
+
+    public string GetDestination()
+    {
+        return destination;
+    }
+
+}
+
 class Program
 {
     static string RandomIP()
@@ -103,7 +130,6 @@ class Program
         Computer comp01 = new Computer("alfa", "Windows 11");
         Computer comp02 = new Computer("beta", "Windows Server");
         Computer comp03 = new Computer("sigma", "Ubuntu");
-        //Computer comp04 = new Computer();
 
         comp01.SwitchOn(RandomIP());
         comp02.SwitchOn(RandomIP());
@@ -126,7 +152,7 @@ class Program
 
         Console.WriteLine("There are {0} computers in the network.", Computer.CountComp());
 
-        Console.WriteLine("-----------------------------------" + "\n");
+        Console.WriteLine("----------------------------------------------------------" + "\n");
 
         comp01.SwitchOn("");
         network.Remove(comp01);
@@ -137,6 +163,25 @@ class Program
             {
                 Console.WriteLine("The PC name is: " + network[i].GetName());
                 Console.WriteLine("The IP is: " + network[i].GetipAdress() + "\n");
+            }
+        }
+
+        Console.WriteLine("There are {0} computers in the network.", Computer.CountComp());
+
+        Console.WriteLine("----------------------------------------------------------" + "\n");
+
+        Server serv01 = new Server("Alpha Server", "adfsdafdsa", "Windows Server", false, "DNS");
+        serv01.SwitchOn(RandomIP());
+        network.Add(serv01);
+
+        for (int i = 0; i < network.Count; i++)
+        {
+            if (network[i].GetIsOn())
+            {
+                Console.WriteLine("The PC name is: " + network[i].GetName());
+                Console.WriteLine("The IP is: " + network[i].GetipAdress() + "\n");
+                //if (network[i] is Server)
+                    //Console.WriteLine("The Destination is: " + network[i].GetDestination() + "\n");
             }
         }
 
