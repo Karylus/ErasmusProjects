@@ -1,96 +1,134 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using PersonalProject;
+using System.IO;
 
-namespace lesson3
+public delegate void printString(string str);
+
+namespace Employees
 {
-    class Personal
+    internal class Program
     {
-        public String name;
-        public String position;
-        public double salary;
-        public int age;
-        public static int counter = 0;
-        public Personal()
+        static void PrintSalary(List<Personal> per)
         {
-        }
-        public Personal(string name, string position, int salary, int age)
-        {
-            this.name = name;
-            this.position = position;
-            this.salary = salary;
-            this.age = age;
-            counter++;
-        }
-        public static int numberOfEmp()
-        {
-            return counter;
-        }
-        public double race(double rate)
-        {
-            return salary += salary * rate / 100;
-        }
-        public static void Avrg(List<Personal> personals)
-        {
-            double avrgAge = 0;
-            foreach (var p in personals)
+            foreach (var p in per)
             {
-                avrgAge += p.age;
+                Console.WriteLine("Name: {0}, Salary($): {1}",
+                    p.name, p.salary);
             }
-            avrgAge = avrgAge / numberOfEmp();
-            Console.WriteLine("The Avarage Age of People is: {0}", Math.Round(avrgAge, 1));
+
+            Console.WriteLine("-------------------------------------\n");
         }
-        public static void PrintPersonels(List<Personal> personals)
+
+        static void PrintPersonal(List<Personal> per)
         {
-            foreach (var p in personals)
+            foreach (var p in per)
             {
-                Console.WriteLine("Name: {0}, Position: {1}, Salary: {2}, Age: {3}", p.name, p.position, p.salary, p.age);
+                Console.WriteLine("Name: {0}, Position: {1}, Salary: {2}, Age: {3}",
+                    p.name, p.position, p.salary, p.age);
             }
-        }
-        public static Personal Fire(List<Personal> personals, Personal person)
-        {
-            personals.Remove(person);
-            return person = null;
+
+            Console.WriteLine("-------------------------------------\n");
         }
 
-
-    }
-    class Program
-    {
-        static void Main(string[] args)
+        static double AverageSalary(List<Personal> per)
         {
-            List<Personal> personals = new List<Personal>();
-            Personal p1 = new Personal("Oguz", "Student", 1500, 22);
-            Personal p2 = new Personal("Berk", "Manager", 2000, 28);
-            Personal p3 = new Personal("Aydin", "Ceo", 2500, 30);
+            double average = per.Average(p => p.salary);
 
-            personals.Add(p1);
-            personals.Add(p2);
-            personals.Add(p3);
+            return average;
+        }
 
-            Personal.PrintPersonels(personals);
-            Console.WriteLine("number of employee: {0} ", Personal.numberOfEmp());
+        static void SalaryStadistics(List<Personal> per)
+        {
+            double max = 0, min = 10e10, temp;
 
-            p1.race(10);
-            
-            Personal.Avrg(personals);
-            
-            Console.WriteLine("-------------------------------------");
-            
-            Personal.PrintPersonels(personals);
-            
-            Personal.Fire(personals, p1);
-            
-            Personal.Avrg(personals);
-            
-            Console.WriteLine(p1.age);
-            
-            Console.WriteLine("-------------------------------------");
-            
-            //Console.WriteLine(p1.name);
-            
-            Console.WriteLine("-------------------------------------");
-            
-            Personal.PrintPersonels(personals);
+            for (int i = 0; i < per.Count; i++)
+            {
+                temp = per[i].salary;
+
+                if (temp < min)
+                    min = temp;
+
+                else if (temp > max)
+                    max = temp;
+            }
+
+            per.Max(p => p.salary);
+
+            double average = AverageSalary(per);
+
+            Console.WriteLine(" The average salary is: {0}\n The maximum salary is: {1}\n " +
+                "The minimum salary is: {2}\n", average, max, min);
+
+            Console.WriteLine("-------------------------------------\n");
+
+        }
+
+        static void Main()
+        {
+            List<Personal> personal = new List<Personal>();
+            Personal p1 = new Personal("Felipe", "Intern", 500, 22);
+            Personal p2 = new Personal("Teresa", "Manager", 1000, 28);
+            Personal p3 = new Personal("Elon", "Ceo", 5500, 30);
+            Personal p4 = new Personal("Juan", "Seller", 2500, 25);
+            Personal p5 = new Personal("Paquito", "Cleaner", 3100, 27);
+
+            personal.Add(p1);
+            personal.Add(p2);
+            personal.Add(p3);
+            personal.Add(p4);
+            personal.Add(p5);
+
+            PrintPersonal(personal);
+
+            Console.WriteLine("Number of employees: {0} ", Personal.NumberOfEmp());
+
+            p1.RaiseSalary(10);
+
+            Personal.AverageAge(personal);
+
+            PrintPersonal(personal);
+
+            Personal.Fire(personal, p1);
+
+            Console.WriteLine("Number of employees: {0} ", Personal.NumberOfEmp());
+
+            Personal.AverageAge(personal);
+
+            double salaryExample = Personal.CalculeSalary(35, 40);
+
+            Console.WriteLine("\nIf the rate is 35$/h and the hours 40, the salary is: {0}\n", salaryExample);
+
+            PrintPersonal(personal);
+
+            PrintSalary(personal);
+
+            SalaryStadistics(personal);
+
+            var result = from p in personal
+                         where p.salary > AverageSalary(personal)
+                         select p;
+
+            List<string> lines = new List<string>();
+
+            string header = "The employees whose salary is more than the average are:";
+
+            Console.WriteLine(header);
+            lines.Add(header);
+
+            foreach(Personal per in result)
+            {
+                string body = per.name + " - " + per.salary + "$";
+                Console.WriteLine(body);
+                lines.Add(body);
+            }
+
+            File.WriteAllLines("MoreSalaryAverage.txt", lines);
+
+            Console.WriteLine("-------------------------------------\n");
         }
     }
 }
