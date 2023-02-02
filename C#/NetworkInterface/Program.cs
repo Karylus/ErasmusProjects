@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using ComputerTest;
+using DevicesInterface;
 
-namespace Network
+namespace NetworkInterface
 {
     class Program
     {
         static string RandomIP(Random rand)
         {
             string ip;
-            
+
             int ip1 = rand.Next(0, 129);
             int ip2 = rand.Next(0, 245);
 
@@ -77,7 +77,6 @@ namespace Network
             Computer.ShowComputers(network);
             Console.WriteLine("\n--------------------------------------------------------------------");
 
-            //omega.ShutDown();
             beta.ShutDown();
             Console.WriteLine("--------------------------------------------------------------------");
 
@@ -86,6 +85,9 @@ namespace Network
 
             //Ping from alfa to 10.0.0.14
             Computer.PingToComputer(network, alfa, "10.0.0.14");
+
+            //Log an error
+            alfa.ReportError();
         }
     }
 }

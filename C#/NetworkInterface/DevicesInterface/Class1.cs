@@ -1,32 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 
-namespace ComputerTest
+namespace DevicesInterface
 {
-    public abstract class Device
+    interface IDevice
     {
-        public Device(string name, string make)
-        {
-            _name = name;
-            _make = make;
-        }
-
-        protected string _name;
-        protected string _make;
-        public abstract void SwitchOn();
-        public abstract void ShutDown();
+        void SwitchOn();
+        void ShutDown();
+        void ReportError(); 
     }
 
-    public class Computer : Device
+    public class Computer : IDevice
     {
-        public Computer(string name, string make, string osystem, bool switched) : base(name, make)
+        public Computer(string name, string make, string osystem, bool switched)
         {
+            this.Name = name;
+            this.Make = make;
             this.OperatingSystem = osystem;
             this.SwitchedOn = switched;
             compCounter++;
         }
 
         // private member variables
+        protected string _name;
+        protected string _make;
         protected string _ipAdress;
         protected bool _switchedOn;
         protected string _operatingSystem;
@@ -45,7 +43,7 @@ namespace ComputerTest
             return switchedCounter;
         }
 
-        public override void SwitchOn()
+        public virtual void SwitchOn()
         {
             this.SwitchedOn = true;
             switchedCounter++;
@@ -53,7 +51,7 @@ namespace ComputerTest
             Console.WriteLine("The comp {0} is starting ...", this.Name);
         }
 
-        public override void ShutDown()
+        public virtual void ShutDown()
         {
             this.SwitchedOn = false;
             switchedCounter--;
@@ -156,11 +154,30 @@ namespace ComputerTest
             string address = "10.0.0." + (++compInNet).ToString();
             return address;
         }
+
+        public string CreateError(string ip)
+        {
+            DateTime dateTime= DateTime.Now;
+
+            return $"{dateTime} - There is an unknown error with {ip}";
+        }
+
+        public void ReportError()
+        {
+            List<string> lines = new List<string> { };
+
+            lines.Add("----------------------------------------");
+            lines.Add(CreateError(this.Ipaddress));
+            //-----------------------------------
+
+            using (StreamWriter outputFile = new StreamWriter("Log.txt"))
+            {
+                foreach (string line in lines)
+                    outputFile.WriteLine(line);
+            }
+        }
     } //end of the class Computer
 
-
-
-    //--------------------------------
     public class Server : Computer
     {
         public Server(string name, string make, string osystem, bool switched, string dest, string ip) : base(name, make, osystem, switched)
@@ -202,5 +219,5 @@ namespace ComputerTest
             Console.WriteLine("The comp {0} is starting ...", this.Name);
         }
     } //end of the class Server
-    
+
 }

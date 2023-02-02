@@ -8,36 +8,24 @@ using System.Threading.Tasks;
 
 namespace PersonalProject
 {
-    public class IPersonal
+    public class Personal
     {
-        public void Fire(List<IPersonal> personal);
-    }
-
-    public class Boss : IPersonal
-    {
-        public Boss (string name, string position, int salary, int age, int extra)
-        {
-            this.Position = "Boss";
-            this.Extra = extra;
-            this.Salary = salary + extra;
-            this.Name = name;
-            this.Position = position;
-            this.Salary = salary;
-            this.Age = age;
-            counter++;
-        }
-
         protected string _name;
         protected string _position;
         protected double _salary;
         protected int _age;
         protected static int counter = 0;
-        private int _extra;
 
-        public int Extra
+        public Personal()
         {
-            get { return _extra; }
-            set { _extra = value; }
+        }
+        public Personal(string name, string position, int salary, int age)
+        {
+            this.Name = name;
+            this.Position = position;
+            this.Salary = salary;
+            this.Age = age;
+            counter++;
         }
 
         public string Name
@@ -72,7 +60,7 @@ namespace PersonalProject
             return Salary += Salary * rate / 100;
         }
 
-        public static void AverageAge(List<IPersonal> personal)
+        public static void AverageAge(List<Personal> personal)
         {
             double avrgAge = 0;
 
@@ -85,8 +73,8 @@ namespace PersonalProject
 
             Console.WriteLine("The avarage age of personal is: {0}", Math.Round(avrgAge, 1));
         }
-
-        public virtual void Fire(List<IPersonal> personal)
+        
+        public virtual void Fire(List<Personal> personal)
         {
             personal.Remove(this);
 
@@ -101,11 +89,28 @@ namespace PersonalProject
 
             return salary;
         }
+    }
 
-        public override void Fire(List<IPersonal> personal)
+    public class Boss : Personal
+    {
+        public Boss (string name, string position, int salary, int age, int extra): base(name, position, salary, age)
+        {
+            this.Position = "Boss";
+            this.Extra = extra;
+            this.Salary = salary + extra;
+        }
+
+        private int _extra;
+
+        public int Extra
+        {
+            get { return _extra; }
+            set { _extra = value; }
+        }
+
+        public override void Fire(List<Personal> personal)
         {
             Console.WriteLine("The boss can't be fired\n");
         }
-
     }
 }

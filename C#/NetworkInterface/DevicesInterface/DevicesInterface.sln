@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33122.133
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevicesInterface", "DevicesInterface.csproj", "{D0BFC763-10C8-4EC4-A86E-06CEF8F51E68}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D0BFC763-10C8-4EC4-A86E-06CEF8F51E68}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0BFC763-10C8-4EC4-A86E-06CEF8F51E68}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0BFC763-10C8-4EC4-A86E-06CEF8F51E68}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0BFC763-10C8-4EC4-A86E-06CEF8F51E68}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {79A5A737-86B4-4FAF-A1C3-DC93EDDD0BEA}
+	EndGlobalSection
+EndGlobal
