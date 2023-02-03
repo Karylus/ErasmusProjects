@@ -59,6 +59,7 @@ namespace SQLDemo
                     int id = Convert.ToInt32(Console.ReadLine());
 
                     SQLiteConnection sQLiteConnection = CreateConnection();
+                    UpdatePlaces(sQLiteConnection, id);
 
                 }
                 else if (i == 0)
@@ -233,6 +234,32 @@ namespace SQLDemo
         
             return total / count;
         }
+
+        static void UpdatePlaces(SQLiteConnection conn, int id)
+        {
+            Console.Write("Enter the new date: ");
+            string newDate = Console.ReadLine();
+
+            Console.Write("Enter the new cost: ");
+            NumberFormatInfo provider = new NumberFormatInfo
+            {
+                NumberDecimalSeparator = "."
+            };
+            double newCost = Convert.ToDouble(Console.ReadLine(), provider);
+
+            SQLiteCommand sqlite_cmd;
+            sqlite_cmd = conn.CreateCommand();
+
+            SQLiteCommand sqlite_cmd_2;
+            sqlite_cmd_2 = conn.CreateCommand();
+
+            sqlite_cmd.CommandText = "UPDATE Places SET date = '" + newDate + "' WHERE id = " + id;
+            sqlite_cmd_2.CommandText = "UPDATE Costs SET cost = '" + newCost + "' WHERE id = " + id;
+
+            sqlite_cmd.ExecuteNonQuery();
+            sqlite_cmd_2.ExecuteNonQuery();
+
+            conn.Close();
+        }
     }
 }
-       
